@@ -1,0 +1,220 @@
+<div class="container-fluid">
+  <div id="myHeader" class="row">
+    <div class="col text-center">
+      <br>
+      <br>
+      <p style="color: aliceblue;" class="h1 text-center">Lista de Tarefas</p>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Nova
+        Tarefa</button>
+      <br>
+      <br>
+
+    </div>
+  </div>
+  <div class="row">
+    <div id="tarefasFazer" class="col-lg-6 col-md-6 col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <p class="h3 text-center"><span class="material-icons">
+              format_list_bulleted
+            </span> Tarefas a fazer</p>
+
+          <div class="table-responsive-xl">
+            <table class="table table-bordered text-center">
+              <thead>
+                <tr>
+                  <th scope="col">Tarefa</th>
+                  <th scope="col">Descrição</th>
+                  <th scope="col">Responsável</th>
+                  <th scope="col">Prazo</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% tarefas.forEach((tarefa, index)=> { %>
+                  <% if(!tarefa.concluida) { %>
+                    <tr>
+                      <td id="tarefaNome<%=tarefa.id%>"><%= tarefa.nome %></td>
+                      <td id="tarefaDescricao<%=tarefa.id%>"><%= tarefa.descricao %></td>
+                      <td id="tarefaResponsavel<%=tarefa.id%>"><%= tarefa.responsavel %></td>
+                      <td id="tarefaPrazo<%=tarefa.id%>"><%= `${moment(tarefa.prazo).format('DD/MM/YYYY')}` %></td>
+                      <td>
+                        <form method="POST" action="tarefas/deletar/<%=tarefa.id%>">
+                          <button onclick="editarTarefaCampos(<%=tarefa.id%>)" data-toggle="modal"
+                            data-target="#modalEditar" class="botaoEditar btn btn-secondary"><span
+                              class="material-icons">
+                              edit
+                            </span></button>
+                          <button class="btn btn-secondary">
+                            <span class="material-icons">
+                              delete
+                            </span>
+                          </button>
+                          <button onclick="completarTarefa(<%=tarefa.id%>)" class="botaoEditar btn btn-secondary"><span
+                              class="material-icons">
+                              done
+                            </span></button>
+                        </form>
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+    <div id="tarefasConcluidas" class="col-lg-6 col-md-6 col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <p class="h3 text-center"><span class="material-icons">
+              done_all
+            </span> Tarefas concluidas</p>
+          <div class="table-responsive-xl">
+            <table class="table table-bordered text-center">
+              <thead>
+                <tr>
+                  <th scope="col">Tarefa</th>
+                  <th scope="col">Descrição</th>
+                  <th scope="col">Responsável</th>
+                  <th scope="col">Prazo</th>
+                  <th scope="col">Ações</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% tarefas.forEach((tarefa, index)=> { %>
+                  <% if(tarefa.concluida) { %>
+                    <tr>
+                      <td id="tarefaNome<%=tarefa.id%>"><%= tarefa.nome %></td>
+                      <td id="tarefaDescricao<%=tarefa.id%>"><%= tarefa.descricao %></td>
+                      <td id="tarefaResponsavel<%=tarefa.id%>"><%= tarefa.responsavel %></td>
+                      <td id="tarefaPrazo<%=tarefa.id%>"><%= `${moment(tarefa.prazo).format('DD/MM/YYYY')}` %></td>
+                      <td>
+
+                        <form method="POST" action="tarefas/deletar/<%=tarefa.id%>">
+                          <button onclick="editarTarefaCampos(<%=tarefa.id%>)" data-toggle="modal"
+                            data-target="#modalEditar" class="botaoEditar btn btn-secondary"><span
+                              class="material-icons">
+                              edit
+                            </span></button>
+                          <button class="btn btn-secondary">
+                            <span class="material-icons">
+                              delete
+                            </span>
+                          </button>
+                          <button onclick="completarTarefa(<%=tarefa.id%>)" class="botaoEditar btn btn-secondary"><span
+                              class="material-icons">
+                              arrow_back
+                            </span></button>
+                        </form>
+
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% }) %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="padding: 1%">
+      <p class="h5 text-center">Adicionar Tarefa</p>
+      <form method="POST" action="/tarefas/adicionar">
+        <div class="row">
+          <div class="col">
+            <input type="text" class="form-control" name="nome" placeholder="Tarefa">
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" name="descricao" placeholder="Descrição">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <input type="text" class="form-control" name="responsavel" placeholder="Responsavél">
+          </div>
+          <div class="col">
+            <input type="date" class="form-control" name="prazo" placeholder="Prazo">
+          </div>
+        </div>
+        <br>
+        <p class="text-center">
+          <button type="submit" class="btn btn-primary">Adicionar</button>
+        </p class="text-center">
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade modalEditar bd-example-modal-lg" tabindex="-1" role="dialog" id="modalEditar"
+  aria-labelledby="modalEditar" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content" style="padding: 1%">
+      <p class="h5 text-center">Editar Tarefa</p>
+      <form method="POST" action="/tarefas/editar">
+        <div class="row">
+          <div class="col">
+            <input id="inputEditarNome" type="text" class="form-control" name="nome" placeholder="Tarefa">
+          </div>
+          <div class="col">
+            <input id="inputEditarDescricao" type="text" class="form-control" name="descricao" placeholder="Descrição">
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col">
+            <input type="text" id="inputEditarResponsavel" class="form-control" name="responsavel"
+              placeholder="Responsavél">
+          </div>
+          <div class="col">
+            <input type="text" id="inputEditarPrazo" class="form-control" name="prazo" placeholder="Prazo">
+          </div>
+        </div>
+        <br>
+        <input type="hidden" id="inputEditarId" name="id"></input>
+        <p class="text-center">
+          <button class="btn btn-primary">Editar</button>
+        </p class="text-center">
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+
+  function completarTarefa(id) {
+    window.location = '/tarefas/completar/' + id
+  }
+
+  function editarTarefaCampos(id) {
+    let nome = document.getElementById(`tarefaNome${id}`).innerHTML
+    let descricao = document.getElementById(`tarefaDescricao${id}`).innerHTML
+    let responsavel = document.getElementById(`tarefaResponsavel${id}`).innerHTML
+    let prazo = document.getElementById(`tarefaPrazo${id}`).innerHTML
+
+    document.getElementById('inputEditarNome').value = nome
+    document.getElementById('inputEditarDescricao').value = descricao
+    document.getElementById('inputEditarResponsavel').value = responsavel
+    document.getElementById('inputEditarPrazo').value = prazo
+    document.getElementById('inputEditarId').value = id
+
+  }
+
+  let botoesEditar = document.getElementsByClassName('botaoEditar')
+  for (botao of botoesEditar) {
+    botao.addEventListener("click", function (event) {
+      event.preventDefault()
+    })
+  }
+
+</script>
