@@ -6,7 +6,7 @@ moment.suppressDeprecationWarnings = true
 
 router.get('/', async (req, res) => {
     
-    const tarefas = await models.Tarefa.findAll({ raw: true })
+    const tarefas = await models.Tarefa.findAll({ raw: true, order: ['prazo'] })
     
     res.render("base", { tarefas, moment: moment });
 })
